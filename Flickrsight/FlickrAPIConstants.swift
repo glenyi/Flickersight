@@ -31,3 +31,7 @@ let FlickrAPIParamText = "text"
 let FlickrAPIParamTag = "tag"
 let FlickrAPIPerPage = "per_page"
 
+
+// MARK: Data Keys
+
+let FlickrAPIDataKeyPhotos = "photos.photo"
