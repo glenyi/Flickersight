@@ -11,8 +11,27 @@ import UIKit
 class PhotoCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var photoImageView: UIImageView!
+    @IBOutlet var activityView: UIActivityIndicatorView!
     
     func loadFlickrPhoto(photo: FlickrPhoto?) {
-        // TODO: load photo
+        guard let photo = photo else {
+            self.photoImageView = nil
+            return
+        }
+        
+        if let image = photo.image {
+            self.photoImageView.image = image
+        } else {
+            self.photoImageView.image = nil
+            self.activityView.startAnimating()
+            photo.loadImage { (image) -> Void in
+                self.activityView.stopAnimating()
+                guard let image = image else {
+                    return
+                }
+                
+                self.photoImageView.image = image
+            }
+        }
     }
 }

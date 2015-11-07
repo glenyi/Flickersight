@@ -21,6 +21,7 @@ class FlickrPhoto: NSObject {
     var farm: Int = 0
     
     var title: String = ""
+    var image: UIImage?
     
     var imageURL: NSURL? {
         get {
@@ -29,9 +30,31 @@ class FlickrPhoto: NSObject {
             }
             
             let urlString = String(format: FlickrImageURLFormat, self.farm, self.server, self.id, self.secret, FlickrImageURLSizeSuffix)
-            print(urlString)
             
             return NSURL(string: urlString)
+        }
+    }
+    
+    func loadImage(completion: (image: UIImage?) -> Void) {
+        guard let imageURL = self.imageURL else {
+            completion(image: nil)
+            return
+        }
+        
+        if let image = self.image {
+            completion(image: image)
+        } else {
+            NSURLSession.sharedSession().dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> Void in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    guard let data = data where error == nil, let image = UIImage(data: data) else {
+                        completion(image: nil)
+                        return
+                    }
+                    
+                    self.image = image
+                    completion(image: image)
+                }
+            }).resume()
         }
     }
     

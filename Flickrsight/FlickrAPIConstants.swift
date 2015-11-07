@@ -35,7 +35,7 @@ let FlickrAPIParamFormat = "format"
 let FlickrAPIParamNoCallback = "nojsoncallback"
 let FlickrAPIParamMethod = "method"
 let FlickrAPIParamText = "text"
-let FlickrAPIParamTag = "tag"
+let FlickrAPIParamTags = "tags"
 let FlickrAPIPerPage = "per_page"
 
 

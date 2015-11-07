@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
 
     let PhotoDetailSegueIdentifier = "PhotoSegue"
     let PhotoCellIdentifier = "PhotoCell"
@@ -16,20 +16,36 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     let PhotosHorizontalInset: CGFloat = 40.0
     let PhotosVerticalInset: CGFloat = 20.0
     
+    let PhotosDefaultSearchText = "cat"
+    let PhotosCount = 20
+    
+    
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var activityView: UIActivityIndicatorView!
     
     var photos: [FlickrPhoto] = []
     var photo: FlickrPhoto?
+    var lastSearchText: String = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // Init search controller
+        let searchBar = UISearchBar()
+        searchBar.placeholder = "Search"
+        searchBar.text = PhotosDefaultSearchText
+        searchBar.showsCancelButton = true
+        searchBar.delegate = self
+        // Add search bar to navigation bar
+        self.navigationItem.titleView = searchBar
+        
         // Set collection view layout
         let layout = self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: PhotosVerticalInset, left: PhotosHorizontalInset, bottom: PhotosVerticalInset, right: PhotosHorizontalInset)
         
-        self.loadPhotosWithSearchText("cat", count: 10)
+        self.loadPhotosWithSearchText(PhotosDefaultSearchText, count: PhotosCount)
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,16 +57,41 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     // MARK: PhotosViewController methods
     
     func loadPhotosWithSearchText(text: String, count: Int) {
+        self.lastSearchText = text
+        
+        self.activityView.startAnimating()
+        self.photos.removeAll()
+        self.collectionView.reloadData()
         FlickrAPIManager.sharedManager.getPhotos(text, count: count) { (photos, error) -> Void in
-            if error != nil {
-                print(error!)
+            self.activityView.stopAnimating()
+            if let error = error {
+                print(error)
             } else {
-                print(photos)
-                self.photos = photos
+                self.photos.appendContentsOf(photos)
                 self.collectionView.reloadData()
             }
         }
     }
+    
+    
+    // MARK: UISearchBarDelegate
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.text = self.lastSearchText
+        
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        guard let text = searchBar.text else {
+            searchBar.resignFirstResponder()
+            return
+        }
+        
+        self.loadPhotosWithSearchText(text, count: PhotosCount)
+        searchBar.resignFirstResponder()
+    }
+    
     
     // MARK: UICollectionViewDataSource
     
@@ -68,7 +109,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         let photo = self.photos[indexPath.row]
-        print(photo.imageURL)
+        if let imageURL = photo.imageURL {
+            print(imageURL)
+        }
         cell.loadFlickrPhoto(photo)
         
         return cell

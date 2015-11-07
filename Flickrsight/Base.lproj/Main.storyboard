@@ -37,10 +37,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-0o-c7g">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-0o-c7g">
                                                     <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                                     <animations/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Gft-AS-b8q">
+                                                    <rect key="frame" x="50" y="50" width="20" height="20"/>
+                                                    <animations/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <animations/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -54,6 +58,7 @@
                                             <constraint firstAttribute="trailing" secondItem="PcQ-0o-c7g" secondAttribute="trailing" id="xxu-0i-jZe"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="activityView" destination="Gft-AS-b8q" id="F63-em-yne"/>
                                             <outlet property="photoImageView" destination="PcQ-0o-c7g" id="FJ2-bJ-a6L"/>
                                         </connections>
                                     </collectionViewCell>
@@ -63,6 +68,10 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="BHF-2E-dNl"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7hd-ne-Bhp">
+                                <rect key="frame" x="177" y="324" width="20" height="20"/>
+                                <animations/>
+                            </activityIndicatorView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -70,8 +79,10 @@
                             <constraint firstAttribute="trailing" secondItem="y5U-Np-kce" secondAttribute="trailing" id="CeS-6k-wUx"/>
                             <constraint firstItem="y5U-Np-kce" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="EvT-Th-7vQ"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="y5U-Np-kce" secondAttribute="bottom" id="JKz-gh-0gt"/>
+                            <constraint firstItem="7hd-ne-Bhp" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LBx-hF-jty"/>
                             <constraint firstItem="y5U-Np-kce" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="cQk-xi-PfE"/>
                             <constraint firstItem="y5U-Np-kce" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ksT-rb-KLe"/>
+                            <constraint firstItem="7hd-ne-Bhp" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="yTw-7D-iD9"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -81,6 +92,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="IIf-fU-C55"/>
                     <connections>
+                        <outlet property="activityView" destination="7hd-ne-Bhp" id="kmp-gj-UEW"/>
                         <outlet property="collectionView" destination="y5U-Np-kce" id="VB0-bx-8oK"/>
                         <segue destination="pn2-0t-yic" kind="presentation" identifier="PhotoSegue" id="lWM-gj-uNC"/>
                     </connections>
@@ -101,15 +113,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XFe-zw-ebE">
-                                <rect key="frame" x="18.5" y="67" width="337.5" height="534"/>
+                                <rect key="frame" x="18.5" y="100.5" width="337.5" height="467"/>
                                 <animations/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3S6-3a-bh3">
+                                <rect key="frame" x="172" y="572" width="30" height="55"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <state key="normal" title="X"/>
+                                <connections>
+                                    <action selector="closeClicked:" destination="pn2-0t-yic" eventType="touchUpInside" id="01g-wB-K5d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="XFe-zw-ebE" firstAttribute="width" secondItem="W1I-fd-Mwz" secondAttribute="width" multiplier="0.9" id="FLF-Nj-kav"/>
-                            <constraint firstItem="XFe-zw-ebE" firstAttribute="height" secondItem="W1I-fd-Mwz" secondAttribute="height" multiplier="0.8" id="Mwv-YI-U6M"/>
+                            <constraint firstItem="XFe-zw-ebE" firstAttribute="height" secondItem="W1I-fd-Mwz" secondAttribute="height" multiplier="0.7" id="Mwv-YI-U6M"/>
+                            <constraint firstItem="FVg-nq-mfS" firstAttribute="top" secondItem="3S6-3a-bh3" secondAttribute="bottom" constant="40" id="QnO-uF-p7B"/>
+                            <constraint firstItem="3S6-3a-bh3" firstAttribute="centerX" secondItem="W1I-fd-Mwz" secondAttribute="centerX" id="S0a-uQ-Y5a"/>
                             <constraint firstItem="XFe-zw-ebE" firstAttribute="centerX" secondItem="W1I-fd-Mwz" secondAttribute="centerX" id="d4P-0C-oyL"/>
                             <constraint firstItem="XFe-zw-ebE" firstAttribute="centerY" secondItem="W1I-fd-Mwz" secondAttribute="centerY" id="kf3-eS-QA8"/>
                         </constraints>

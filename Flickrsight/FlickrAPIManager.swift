@@ -38,7 +38,7 @@ class FlickrAPIManager: NSObject {
 
     func getPhotos(searchText: String, count: Int, completed: (photos: [FlickrPhoto], error: NSError?) -> Void) -> NSURLSessionTask {
         let params: [String:AnyObject] = [ FlickrAPIParamMethod:FlickrAPIMethodSearch,
-            FlickrAPIParamText:searchText,
+            FlickrAPIParamTags:searchText,
             FlickrAPIPerPage:count ]
         let request = self.urlRequestWithParams(params, method: HTTPMethodGet)
         
@@ -59,7 +59,13 @@ class FlickrAPIManager: NSObject {
             
             do {
                 let responseObject = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-                let photosJson = (responseObject[FlickrAPIDataKeyPhotos] as! [String:AnyObject])[FlickrAPIDataKeyPhoto]  as! [ [String:AnyObject] ]
+                let json = (responseObject[FlickrAPIDataKeyPhotos] as! [String:AnyObject])[FlickrAPIDataKeyPhoto]  as? [ [String:AnyObject] ]
+                guard let photosJson = json else {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        completed(photos: [], error: NSError(domain: "Flickrswift", code: 1, userInfo: nil))
+                    })
+                    return
+                }
                 
                 var photos: [FlickrPhoto] = []
                 for photoJson in photosJson {
@@ -71,8 +77,6 @@ class FlickrAPIManager: NSObject {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completed(photos: photos, error: nil)
                 })
-                
-                
             } catch let error as NSError {
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     completed(photos: [], error: error)
