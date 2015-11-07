@@ -13,6 +13,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     let PhotoDetailSegueIdentifier = "PhotoSegue"
     let PhotoCellIdentifier = "PhotoCell"
     
+    let PhotosHorizontalInset: CGFloat = 40.0
+    let PhotosVerticalInset: CGFloat = 20.0
+    
     @IBOutlet var collectionView: UICollectionView!
     
     var photos: [FlickrPhoto] = []
@@ -21,6 +24,12 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        // Set collection view layout
+        let layout = self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        layout.sectionInset = UIEdgeInsets(top: PhotosVerticalInset, left: PhotosHorizontalInset, bottom: PhotosVerticalInset, right: PhotosHorizontalInset)
+        
+        self.loadPhotosWithSearchText("cat", count: 10)
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,6 +37,20 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         // Dispose of any resources that can be recreated.
     }
 
+    
+    // MARK: PhotosViewController methods
+    
+    func loadPhotosWithSearchText(text: String, count: Int) {
+        FlickrAPIManager.sharedManager.getPhotos(text, count: count) { (photos, error) -> Void in
+            if error != nil {
+                print(error!)
+            } else {
+                print(photos)
+                self.photos = photos
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     // MARK: UICollectionViewDataSource
     
@@ -45,6 +68,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         let photo = self.photos[indexPath.row]
+        print(photo.imageURL)
         cell.loadFlickrPhoto(photo)
         
         return cell
@@ -58,6 +82,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
             return
         }
         self.photo = self.photos[indexPath.row]
+        self.performSegueWithIdentifier(PhotoDetailSegueIdentifier, sender: self)
     }
     
     

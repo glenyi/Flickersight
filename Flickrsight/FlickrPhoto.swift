@@ -28,15 +28,24 @@ class FlickrPhoto: NSObject {
                 return nil
             }
             
-            let url = NSURL()
+            let urlString = String(format: FlickrImageURLFormat, self.farm, self.server, self.id, self.secret, FlickrImageURLSizeSuffix)
+            print(urlString)
             
-            // TODO: Fill out url
-            return url
+            return NSURL(string: urlString)
         }
     }
     
-    func loadFromFlickrAPI(dictionary: Dictionary<String, AnyObject>) {
+    func loadFromFlickrAPI(dictionary: [String:AnyObject]?) {
+        guard let dictionary = dictionary else {
+            return
+        }
         
+        self.id = dictionary["id"] as! String
+        self.owner = dictionary["owner"] as! String
+        self.secret = dictionary["secret"] as! String
+        self.server = dictionary["server"] as! String
+        self.farm = dictionary["farm"] as! Int
+        self.title = dictionary["title"] as! String
     }
     
 }

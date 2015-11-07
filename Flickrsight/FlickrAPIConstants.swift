@@ -18,6 +18,11 @@ let FlickrAPISecret = "cfb9f3bf61bdb176"
 let FlickrAPIBaseURL = "https://api.flickr.com/services/rest"
 
 
+// MARK: HTTP Methods
+
+let HTTPMethodGet = "GET"
+
+
 // MARK: Methods
 
 let FlickrAPIMethodSearch = "flickr.photos.search"
@@ -25,8 +30,10 @@ let FlickrAPIMethodSearch = "flickr.photos.search"
 
 // MARK: Params
 
-let FlickrAPIParamDefaults = "page=1&format=json&nojsoncallback=1"
 let FlickrAPIParamApiKey = "api_key"
+let FlickrAPIParamFormat = "format"
+let FlickrAPIParamNoCallback = "nojsoncallback"
+let FlickrAPIParamMethod = "method"
 let FlickrAPIParamText = "text"
 let FlickrAPIParamTag = "tag"
 let FlickrAPIPerPage = "per_page"
@@ -34,4 +41,5 @@ let FlickrAPIPerPage = "per_page"
 
 // MARK: Data Keys
 
-let FlickrAPIDataKeyPhotos = "photos.photo"
+let FlickrAPIDataKeyPhotos = "photos"
+let FlickrAPIDataKeyPhoto = "photo"
