@@ -15,7 +15,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     func loadFlickrPhoto(photo: FlickrPhoto?) {
         guard let photo = photo else {
-            self.photoImageView = nil
+            self.photoImageView.image = nil
             return
         }
         

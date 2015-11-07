@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Photos View Controller-->
@@ -94,56 +93,10 @@
                     <connections>
                         <outlet property="activityView" destination="7hd-ne-Bhp" id="kmp-gj-UEW"/>
                         <outlet property="collectionView" destination="y5U-Np-kce" id="VB0-bx-8oK"/>
-                        <segue destination="pn2-0t-yic" kind="presentation" identifier="PhotoSegue" id="lWM-gj-uNC"/>
                     </connections>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="214.5" y="386.5"/>
-        </scene>
-        <!--Photo Detail View Controller-->
-        <scene sceneID="4Si-8K-2kw">
-            <objects>
-                <viewController id="pn2-0t-yic" customClass="PhotoDetailViewController" customModule="Flickrsight" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="BSI-10-88J"/>
-                        <viewControllerLayoutGuide type="bottom" id="FVg-nq-mfS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="W1I-fd-Mwz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XFe-zw-ebE">
-                                <rect key="frame" x="18.5" y="100.5" width="337.5" height="467"/>
-                                <animations/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3S6-3a-bh3">
-                                <rect key="frame" x="172" y="572" width="30" height="55"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                                <state key="normal" title="X"/>
-                                <connections>
-                                    <action selector="closeClicked:" destination="pn2-0t-yic" eventType="touchUpInside" id="01g-wB-K5d"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="XFe-zw-ebE" firstAttribute="width" secondItem="W1I-fd-Mwz" secondAttribute="width" multiplier="0.9" id="FLF-Nj-kav"/>
-                            <constraint firstItem="XFe-zw-ebE" firstAttribute="height" secondItem="W1I-fd-Mwz" secondAttribute="height" multiplier="0.7" id="Mwv-YI-U6M"/>
-                            <constraint firstItem="FVg-nq-mfS" firstAttribute="top" secondItem="3S6-3a-bh3" secondAttribute="bottom" constant="40" id="QnO-uF-p7B"/>
-                            <constraint firstItem="3S6-3a-bh3" firstAttribute="centerX" secondItem="W1I-fd-Mwz" secondAttribute="centerX" id="S0a-uQ-Y5a"/>
-                            <constraint firstItem="XFe-zw-ebE" firstAttribute="centerX" secondItem="W1I-fd-Mwz" secondAttribute="centerX" id="d4P-0C-oyL"/>
-                            <constraint firstItem="XFe-zw-ebE" firstAttribute="centerY" secondItem="W1I-fd-Mwz" secondAttribute="centerY" id="kf3-eS-QA8"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="photoImageView" destination="XFe-zw-ebE" id="BwI-JX-Bzx"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qQJ-NT-q2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="668.5" y="386.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qfS-aq-UGo">

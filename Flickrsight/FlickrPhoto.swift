@@ -11,8 +11,9 @@ import UIKit
 class FlickrPhoto: NSObject {
     
     // https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_[mstzb].jpg
-    let FlickrImageURLFormat = "https://farm%i.staticflickr.com/%@/%@_%@_%@.jpg"
-    let FlickrImageURLSizeSuffix = "m"
+    // https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
+    let FlickrImageURLFormat = "https://farm%i.staticflickr.com/%@/%@_%@.jpg"
+    let FlickrImageURLSizeSuffix = "z"
     
     var id: String = ""
     var owner: String = ""
@@ -29,6 +30,7 @@ class FlickrPhoto: NSObject {
                 return nil
             }
             
+            // Form image URL
             let urlString = String(format: FlickrImageURLFormat, self.farm, self.server, self.id, self.secret, FlickrImageURLSizeSuffix)
             
             return NSURL(string: urlString)
@@ -41,6 +43,7 @@ class FlickrPhoto: NSObject {
             return
         }
         
+        // Load image asynchronously if needed
         if let image = self.image {
             completion(image: image)
         } else {

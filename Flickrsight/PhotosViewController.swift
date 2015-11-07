@@ -9,23 +9,29 @@
 import UIKit
 
 class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
-
-    let PhotoDetailSegueIdentifier = "PhotoSegue"
     let PhotoCellIdentifier = "PhotoCell"
     
     let PhotosHorizontalInset: CGFloat = 40.0
     let PhotosVerticalInset: CGFloat = 20.0
     
-    let PhotosDefaultSearchText = "cat"
-    let PhotosCount = 20
+    let PhotoTappedFrameSizeRatio: CGFloat = 0.95
+    let PhotoTappedAnimationDuration: NSTimeInterval = 0.5
+    let PhotoTappedAnimationOptions: UIViewAnimationOptions = [ .CurveEaseInOut ]
+    let PhotoTappedSpringDampening: CGFloat = 0.9
     
+    let PhotosDefaultSearchText = "cat"
+    let PhotosCount = 10
+
     
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var activityView: UIActivityIndicatorView!
     
     var photos: [FlickrPhoto] = []
-    var photo: FlickrPhoto?
     var lastSearchText: String = ""
+    
+    var effectView: UIVisualEffectView?
+    var photoImageView: UIImageView?
+    var selectedPhotoCell: PhotoCollectionViewCell?
     
     
     override func viewDidLoad() {
@@ -71,6 +77,72 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
                 self.collectionView.reloadData()
             }
         }
+    }
+    
+    func userClickedPhotoCell(cell: PhotoCollectionViewCell) {
+        // Init photo image view
+        let superview = self.navigationController!.view
+        let frame = superview.convertRect(cell.frame, fromView: self.collectionView)
+        let photoImageView = UIImageView(frame: frame)
+        photoImageView.image = cell.photoImageView.image
+        photoImageView.userInteractionEnabled = true
+        photoImageView.contentMode = cell.photoImageView.contentMode
+        photoImageView.layer.masksToBounds = true
+        
+        // Add blur effect and image view
+        let blurEffect = UIBlurEffect(style: .Light)
+        let effectView = UIVisualEffectView(effect: blurEffect)
+        effectView.frame = superview.bounds
+        effectView.alpha = 0
+        superview.addSubview(effectView)
+        superview.addSubview(photoImageView)
+        cell.hidden = true
+        
+        // Add tap gesture to dismiss view
+        let tapGesture = UITapGestureRecognizer(target: self, action: "photoImageViewTapped:")
+        superview.addGestureRecognizer(tapGesture)
+        
+        // Calculate new image view frame
+        let width = PhotoTappedFrameSizeRatio * superview.frame.width
+        let height = photoImageView.frame.height * width / photoImageView.frame.width
+        let size = CGSize(width: width, height: height)
+        let origin = CGPoint(x: (superview.frame.width - width)/2.0, y: (superview.frame.height - height)/2.0)
+        let rect = CGRect(origin: origin, size: size)
+        
+        // Animate photo image view
+        UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
+            UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
+            self.navigationController!.navigationBarHidden = true
+            photoImageView.frame = rect
+            effectView.alpha = 1.0
+        }, completion: { (completed) -> Void in
+            self.effectView = effectView
+            self.photoImageView = photoImageView
+            self.selectedPhotoCell = cell
+        })
+    }
+    
+    func photoImageViewTapped(tapGesture: UITapGestureRecognizer) {
+        guard let effectView = self.effectView, let photoImageView = self.photoImageView, let cell = self.selectedPhotoCell, let superview = tapGesture.view else {
+            return
+        }
+        
+        // Animate photo image view
+        UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
+            UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
+            self.navigationController!.navigationBarHidden = false
+            photoImageView.frame = self.navigationController!.view.convertRect(cell.frame, fromView: self.collectionView)
+            self.effectView!.alpha = 0.0
+        }, completion: { (completed) -> Void in
+            superview.removeGestureRecognizer(tapGesture)
+            photoImageView.removeFromSuperview()
+            effectView.removeFromSuperview()
+            cell.hidden = false
+            
+            self.effectView = nil
+            self.photoImageView = nil
+            self.selectedPhotoCell = nil
+        })
     }
     
     
@@ -124,19 +196,11 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         guard indexPath.row < self.photos.count else {
             return
         }
-        self.photo = self.photos[indexPath.row]
-        self.performSegueWithIdentifier(PhotoDetailSegueIdentifier, sender: self)
-    }
-    
-    
-    // MARK: Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == PhotoDetailSegueIdentifier {
-            let vc = segue.destinationViewController as! PhotoDetailViewController
-            vc.photo = self.photo
+        
+        if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCollectionViewCell, let _ = cell.photoImageView.image {
+            self.userClickedPhotoCell(cell)
         }
     }
-
+    
 }
 
