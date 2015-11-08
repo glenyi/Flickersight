@@ -32,14 +32,14 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         return alertController
     }()
     
-    lazy var animationController: PhotoAnimationController = {
+    let animationController: PhotoAnimationController = {
         let animationController = PhotoAnimationController()
         
         return animationController
     }()
     
-    var selectedPhotoCell: PhotoCollectionViewCell?
     var selectedPhoto: FlickrPhoto?
+    var selectedPhotoCell: PhotoCollectionViewCell?
     
     
     override func viewDidLoad() {

@@ -15,7 +15,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     @IBOutlet var photoImageView: UIImageView!
     @IBOutlet var activityView: UIActivityIndicatorView!
     
-    var imageTask: NSURLSessionTask?
+    private var imageTask: NSURLSessionTask?
     
     func loadFlickrPhoto(photo: FlickrPhoto?) {
         guard let photo = photo else {
