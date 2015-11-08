@@ -8,10 +8,11 @@
 
 import UIKit
 
-class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate {
+class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UISearchBarDelegate, UINavigationControllerDelegate {
+    
+    let PhotoSegueIdentifier = "PhotoSegue"
     
     let PhotoCellIdentifier = "PhotoCell"
-    
     let PhotosVerticalInset: CGFloat = 20.0
     
     let PhotoTappedFrameSizeRatio: CGFloat = 0.95
@@ -53,6 +54,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     }()
     
     var selectedPhotoCell: PhotoCollectionViewCell?
+    var selectedPhoto: FlickrPhoto?
     
     
     override func viewDidLoad() {
@@ -103,6 +105,16 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         self.loadPhotosWithSearchText(PhotosDefaultSearchText, count: PhotosCount, sortParam: self.sortParam)
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController!.navigationBarHidden = false
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -247,7 +259,29 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCollectionViewCell, let _ = cell.photoImageView.image {
-            self.userClickedPhotoCell(cell)
+            //self.userClickedPhotoCell(cell)
+            
+            self.selectedPhotoCell = cell
+            self.selectedPhoto = self.photos[indexPath.row]
+            self.performSegueWithIdentifier(PhotoSegueIdentifier, sender: self)
+        }
+    }
+    
+    
+    // MARK: UINavigationControllerDelegate
+    
+    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        return nil
+    }
+    
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == PhotoSegueIdentifier {
+            let vc = segue.destinationViewController as! PhotoDetailsViewController
+            vc.photo = self.selectedPhoto
         }
     }
     

@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Photos View Controller-->
@@ -112,11 +114,58 @@
                     <connections>
                         <outlet property="activityView" destination="7hd-ne-Bhp" id="kmp-gj-UEW"/>
                         <outlet property="collectionView" destination="y5U-Np-kce" id="VB0-bx-8oK"/>
+                        <segue destination="t0L-fv-SZC" kind="show" identifier="PhotoSegue" id="TPK-B7-Cmn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="214.5" y="386.5"/>
+            <point key="canvasLocation" x="-45.5" y="240.5"/>
+        </scene>
+        <!--Photo Details View Controller-->
+        <scene sceneID="lhe-Xq-1lU">
+            <objects>
+                <viewController id="t0L-fv-SZC" customClass="PhotoDetailsViewController" customModule="Flickrsight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="In3-Df-n3S"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ngf-GO-sZu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="p94-dv-a6V">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TcD-nE-ZDI">
+                                <rect key="frame" x="9.5" y="155.5" width="356" height="356"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="TcD-nE-ZDI" secondAttribute="height" multiplier="1:1" id="lKt-lC-ZSy"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="centerX" secondItem="p94-dv-a6V" secondAttribute="centerX" id="cRB-6w-CFk"/>
+                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="centerY" secondItem="p94-dv-a6V" secondAttribute="centerY" id="uLq-KC-KFW"/>
+                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="width" secondItem="p94-dv-a6V" secondAttribute="width" multiplier="0.95" id="vzd-4S-e3L"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="6Xw-OG-FJp" appends="YES" id="pG4-3J-ZKi"/>
+                        </connections>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="photoImageView" destination="TcD-nE-ZDI" id="Ibi-sh-3d5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TEW-s8-aC7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="6Xw-OG-FJp">
+                    <connections>
+                        <action selector="viewTapped:" destination="t0L-fv-SZC" id="3WF-md-M8x"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="393.5" y="240.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qfS-aq-UGo">
@@ -136,7 +185,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s1d-Ki-7HI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-228" y="387"/>
+            <point key="canvasLocation" x="-488.5" y="240.5"/>
         </scene>
     </scenes>
 </document>
