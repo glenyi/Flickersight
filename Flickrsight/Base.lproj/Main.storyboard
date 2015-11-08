@@ -36,25 +36,39 @@
                                             <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-0o-c7g">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="382-6P-Pdx">
                                                     <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PcQ-0o-c7g">
+                                                            <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
+                                                            <animations/>
+                                                        </imageView>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Gft-AS-b8q">
+                                                            <rect key="frame" x="50" y="50" width="20" height="20"/>
+                                                            <animations/>
+                                                        </activityIndicatorView>
+                                                    </subviews>
                                                     <animations/>
-                                                </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Gft-AS-b8q">
-                                                    <rect key="frame" x="50" y="50" width="20" height="20"/>
-                                                    <animations/>
-                                                </activityIndicatorView>
+                                                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstItem="PcQ-0o-c7g" firstAttribute="top" secondItem="382-6P-Pdx" secondAttribute="top" id="0zB-KU-IVe"/>
+                                                        <constraint firstAttribute="bottom" secondItem="PcQ-0o-c7g" secondAttribute="bottom" id="GIr-aB-s0E"/>
+                                                        <constraint firstItem="Gft-AS-b8q" firstAttribute="centerX" secondItem="382-6P-Pdx" secondAttribute="centerX" id="dHj-Eo-uGa"/>
+                                                        <constraint firstItem="PcQ-0o-c7g" firstAttribute="leading" secondItem="382-6P-Pdx" secondAttribute="leading" id="gtJ-WP-BIy"/>
+                                                        <constraint firstAttribute="trailing" secondItem="PcQ-0o-c7g" secondAttribute="trailing" id="m4J-Eu-4WC"/>
+                                                        <constraint firstItem="Gft-AS-b8q" firstAttribute="centerY" secondItem="382-6P-Pdx" secondAttribute="centerY" id="wMY-M9-ZQe"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <animations/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <animations/>
-                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstItem="PcQ-0o-c7g" firstAttribute="leading" secondItem="gjh-Dq-FSI" secondAttribute="leading" id="543-5n-lTw"/>
-                                            <constraint firstItem="PcQ-0o-c7g" firstAttribute="top" secondItem="gjh-Dq-FSI" secondAttribute="top" id="jRG-sL-Dtx"/>
-                                            <constraint firstAttribute="bottom" secondItem="PcQ-0o-c7g" secondAttribute="bottom" id="qTM-XZ-0QM"/>
-                                            <constraint firstAttribute="trailing" secondItem="PcQ-0o-c7g" secondAttribute="trailing" id="xxu-0i-jZe"/>
+                                            <constraint firstAttribute="trailing" secondItem="382-6P-Pdx" secondAttribute="trailing" id="3vp-dn-eps"/>
+                                            <constraint firstAttribute="bottom" secondItem="382-6P-Pdx" secondAttribute="bottom" id="DN1-lN-BHB"/>
+                                            <constraint firstItem="382-6P-Pdx" firstAttribute="top" secondItem="gjh-Dq-FSI" secondAttribute="top" id="GTP-Zf-8Uv"/>
+                                            <constraint firstItem="382-6P-Pdx" firstAttribute="leading" secondItem="gjh-Dq-FSI" secondAttribute="leading" id="iiD-mu-HSR"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="activityView" destination="Gft-AS-b8q" id="F63-em-yne"/>

@@ -37,17 +37,18 @@ class FlickrPhoto: NSObject {
         }
     }
     
-    func loadImage(completion: (image: UIImage?) -> Void) {
+    func loadImage(completion: (image: UIImage?) -> Void) -> NSURLSessionTask? {
         guard let imageURL = self.imageURL else {
             completion(image: nil)
-            return
+            return nil
         }
         
         // Load image asynchronously if needed
         if let image = self.image {
             completion(image: image)
+            return nil
         } else {
-            NSURLSession.sharedSession().dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> Void in
+            let task = NSURLSession.sharedSession().dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     guard let data = data where error == nil, let image = UIImage(data: data) else {
                         completion(image: nil)
@@ -57,7 +58,10 @@ class FlickrPhoto: NSObject {
                     self.image = image
                     completion(image: image)
                 }
-            }).resume()
+            })
+            task.resume()
+            
+            return task
         }
     }
     

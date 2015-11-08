@@ -12,7 +12,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     let PhotoCellIdentifier = "PhotoCell"
     
-    let PhotosHorizontalInset: CGFloat = 30.0
     let PhotosVerticalInset: CGFloat = 20.0
     
     let PhotoTappedFrameSizeRatio: CGFloat = 0.95
@@ -21,7 +20,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     let PhotoTappedSpringDampening: CGFloat = 0.9
     
     let PhotosDefaultSearchText = "cat"
-    let PhotosCount = 10
+    let PhotosCount = 20
 
     
     @IBOutlet var collectionView: UICollectionView!
@@ -96,7 +95,10 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         // Set collection view layout
         let layout = self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.sectionInset = UIEdgeInsets(top: PhotosVerticalInset, left: PhotosHorizontalInset, bottom: PhotosVerticalInset, right: PhotosHorizontalInset)
+        let width = self.view.frame.width/2.5
+        layout.itemSize = CGSize(width: width, height: width)
+        let horizontalInset = (self.view.frame.width - 2 * width) / 3.0
+        layout.sectionInset = UIEdgeInsets(top: PhotosVerticalInset, left: horizontalInset, bottom: PhotosVerticalInset, right: horizontalInset)
         
         self.loadPhotosWithSearchText(PhotosDefaultSearchText, count: PhotosCount, sortParam: self.sortParam)
     }
