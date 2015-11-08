@@ -48,11 +48,14 @@ let FlickrAPIDataKeyPhoto = "photo"
 
 // MARK: Sort Params
 
-let FlickrAPISortDatePostedAsc = "date-posted-asc"
-let FlickrAPISortDatePostedDesc = "date-posted-desc"
-let FlickrAPISortDateTakenAsc = "date-taken-asc"
-let FlickrAPISortDateTakenDesc = "date-taken-desc"
-let FlickrAPISortInterestingnessAsc = "interestingness-asc"
-let FlickrAPISortInterestingnessDesc = "interestingness-desc"
-let FlickrAPISortRelevance = "relevance"
+enum FlickrAPISortParam: String {
+    case DatePostedAsc = "date-posted-asc"
+    case DatePostedDesc = "date-posted-desc"
+    case DateTakenAsc = "date-taken-asc"
+    case DateTakenDesc = "date-taken-desc"
+    case InterestingnessAsc = "interestingness-asc"
+    case InterestingnessDesc = "interestingness-desc"
+    case Relevance = "relevance"
+}
+
 

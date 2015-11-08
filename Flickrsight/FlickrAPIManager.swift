@@ -37,11 +37,12 @@ class FlickrAPIManager: NSObject {
         return request
     }
 
-    func getPhotos(searchText: String, count: Int, completed: (photos: [FlickrPhoto], error: NSError?) -> Void) -> NSURLSessionTask? {
+    func getPhotos(searchText: String, count: Int, sortParam: FlickrAPISortParam, completed: (photos: [FlickrPhoto], error: NSError?) -> Void) -> NSURLSessionTask? {
         // Create request params
         let params: [String:AnyObject] = [ FlickrAPIParamMethod:FlickrAPIMethodSearch,
             FlickrAPIParamTags:searchText,
-            FlickrAPIParamPerPage:count ]
+            FlickrAPIParamPerPage:count,
+            FlickrAPIParamSort:sortParam.rawValue ]
         
         // Start URL session task
         guard let request = self.urlRequestWithParams(params, method: HTTPMethodGet) else {
