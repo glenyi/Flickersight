@@ -89,7 +89,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="IIf-fU-C55"/>
+                    <navigationItem key="navigationItem" id="IIf-fU-C55">
+                        <barButtonItem key="leftBarButtonItem" title="Sort" id="m67-IX-HUE">
+                            <connections>
+                                <action selector="sortClicked:" destination="BYZ-38-t0r" id="pXQ-eW-Kl6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityView" destination="7hd-ne-Bhp" id="kmp-gj-UEW"/>
                         <outlet property="collectionView" destination="y5U-Np-kce" id="VB0-bx-8oK"/>

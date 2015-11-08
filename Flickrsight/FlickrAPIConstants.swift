@@ -36,10 +36,23 @@ let FlickrAPIParamNoCallback = "nojsoncallback"
 let FlickrAPIParamMethod = "method"
 let FlickrAPIParamText = "text"
 let FlickrAPIParamTags = "tags"
-let FlickrAPIPerPage = "per_page"
+let FlickrAPIParamPerPage = "per_page"
+let FlickrAPIParamSort = "sort"
 
 
 // MARK: Data Keys
 
 let FlickrAPIDataKeyPhotos = "photos"
 let FlickrAPIDataKeyPhoto = "photo"
+
+
+// MARK: Sort Params
+
+let FlickrAPISortDatePostedAsc = "date-posted-asc"
+let FlickrAPISortDatePostedDesc = "date-posted-desc"
+let FlickrAPISortDateTakenAsc = "date-taken-asc"
+let FlickrAPISortDateTakenDesc = "date-taken-desc"
+let FlickrAPISortInterestingnessAsc = "interestingness-asc"
+let FlickrAPISortInterestingnessDesc = "interestingness-desc"
+let FlickrAPISortRelevance = "relevance"
+

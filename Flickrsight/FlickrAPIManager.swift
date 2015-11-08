@@ -41,7 +41,7 @@ class FlickrAPIManager: NSObject {
         // Create request params
         let params: [String:AnyObject] = [ FlickrAPIParamMethod:FlickrAPIMethodSearch,
             FlickrAPIParamTags:searchText,
-            FlickrAPIPerPage:count ]
+            FlickrAPIParamPerPage:count ]
         
         // Start URL session task
         guard let request = self.urlRequestWithParams(params, method: HTTPMethodGet) else {

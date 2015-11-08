@@ -29,8 +29,22 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     var photos: [FlickrPhoto] = []
     var lastSearchText: String = ""
     
-    var effectView: UIVisualEffectView?
-    var photoImageView: UIImageView?
+    let effectView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .Dark)
+        let effectView = UIVisualEffectView(effect: blurEffect)
+        effectView.alpha = 0
+        
+        return effectView
+    }()
+    
+    let photoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.userInteractionEnabled = true
+        imageView.layer.masksToBounds = true
+
+        return imageView
+    }()
+    
     var selectedPhotoCell: PhotoCollectionViewCell?
     
     
@@ -60,6 +74,13 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
 
     
+    // MARK: Action outlets
+    
+    @IBAction func sortClicked(sender: UIBarButtonItem) {
+        print("sort")
+    }
+    
+    
     // MARK: PhotosViewController methods
     
     func loadPhotosWithSearchText(text: String, count: Int) {
@@ -82,20 +103,15 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     func userClickedPhotoCell(cell: PhotoCollectionViewCell) {
         // Init photo image view
         let superview = self.navigationController!.view
-        let frame = superview.convertRect(cell.frame, fromView: self.collectionView)
-        let photoImageView = UIImageView(frame: frame)
-        photoImageView.image = cell.photoImageView.image
-        photoImageView.userInteractionEnabled = true
-        photoImageView.contentMode = cell.photoImageView.contentMode
-        photoImageView.layer.masksToBounds = true
+        self.photoImageView.frame = superview.convertRect(cell.frame, fromView: self.collectionView)
+        self.photoImageView.image = cell.photoImageView.image
+        self.photoImageView.contentMode = cell.photoImageView.contentMode
         
         // Add blur effect and image view
-        let blurEffect = UIBlurEffect(style: .Light)
-        let effectView = UIVisualEffectView(effect: blurEffect)
-        effectView.frame = superview.bounds
-        effectView.alpha = 0
-        superview.addSubview(effectView)
-        superview.addSubview(photoImageView)
+        self.effectView.frame = superview.bounds
+        self.effectView.alpha = 0
+        superview.addSubview(self.effectView)
+        superview.addSubview(self.photoImageView)
         cell.hidden = true
         
         // Add tap gesture to dismiss view
@@ -113,17 +129,16 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
             UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
             self.navigationController!.navigationBarHidden = true
-            photoImageView.frame = rect
-            effectView.alpha = 1.0
+            
+            self.photoImageView.frame = rect
+            self.effectView.alpha = 1.0
         }, completion: { (completed) -> Void in
-            self.effectView = effectView
-            self.photoImageView = photoImageView
             self.selectedPhotoCell = cell
         })
     }
     
     func photoImageViewTapped(tapGesture: UITapGestureRecognizer) {
-        guard let effectView = self.effectView, let photoImageView = self.photoImageView, let cell = self.selectedPhotoCell, let superview = tapGesture.view else {
+        guard let cell = self.selectedPhotoCell, let superview = tapGesture.view else {
             return
         }
         
@@ -131,16 +146,15 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
             UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
             self.navigationController!.navigationBarHidden = false
-            photoImageView.frame = self.navigationController!.view.convertRect(cell.frame, fromView: self.collectionView)
-            self.effectView!.alpha = 0.0
+            
+            self.photoImageView.frame = self.navigationController!.view.convertRect(cell.frame, fromView: self.collectionView)
+            self.effectView.alpha = 0.0
         }, completion: { (completed) -> Void in
             superview.removeGestureRecognizer(tapGesture)
-            photoImageView.removeFromSuperview()
-            effectView.removeFromSuperview()
+            self.photoImageView.removeFromSuperview()
+            self.effectView.removeFromSuperview()
             cell.hidden = false
             
-            self.effectView = nil
-            self.photoImageView = nil
             self.selectedPhotoCell = nil
         })
     }
