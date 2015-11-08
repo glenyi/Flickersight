@@ -16,6 +16,7 @@ class FlickrAPIManager: NSObject {
     
     static let sharedManager = FlickrAPIManager()
     
+    
     func urlRequestWithParams(params: [String:AnyObject], method: String) -> NSMutableURLRequest? {
         // Create query items from params
         let urlComponents = NSURLComponents(string: FlickrAPIBaseURL)!

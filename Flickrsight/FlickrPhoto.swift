@@ -66,12 +66,12 @@ class FlickrPhoto: NSObject {
             return
         }
         
-        self.id = dictionary["id"] as! String
-        self.owner = dictionary["owner"] as! String
-        self.secret = dictionary["secret"] as! String
-        self.server = dictionary["server"] as! String
-        self.farm = dictionary["farm"] as! Int
-        self.title = dictionary["title"] as! String
+        self.id = dictionary["id"] as? String ?? ""
+        self.owner = dictionary["owner"] as? String ?? ""
+        self.secret = dictionary["secret"] as? String ?? ""
+        self.server = dictionary["server"] as? String ?? ""
+        self.farm = dictionary["farm"] as? Int ?? 0
+        self.title = dictionary["title"] as? String ?? ""
     }
     
 }
