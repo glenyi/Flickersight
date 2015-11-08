@@ -17,7 +17,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     let PhotoTappedFrameSizeRatio: CGFloat = 0.95
     let PhotoTappedAnimationDuration: NSTimeInterval = 0.5
     let PhotoTappedAnimationOptions: UIViewAnimationOptions = [ .CurveEaseInOut ]
-    let PhotoTappedSpringDampening: CGFloat = 0.9
+    let PhotoTappedSpringDampening: CGFloat = 0.8
     
     let PhotosDefaultSearchText = "cat"
     let PhotosCount = 20
@@ -140,7 +140,8 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     func userClickedPhotoCell(cell: PhotoCollectionViewCell) {
         // Init photo image view
         let superview = self.navigationController!.view
-        self.photoImageView.frame = superview.convertRect(cell.frame, fromView: self.collectionView)
+        let originalFrame = superview.convertRect(cell.frame, fromView: self.collectionView)
+        self.photoImageView.frame = originalFrame
         self.photoImageView.image = cell.photoImageView.image
         self.photoImageView.contentMode = cell.photoImageView.contentMode
         
@@ -164,8 +165,10 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         // Animate photo image view
         UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
-            UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
-            self.navigationController!.navigationBarHidden = true
+            // Hide navigation bar if image overlaps it
+            if CGRectIntersectsRect(self.navigationController!.navigationBar.frame, originalFrame) {
+                self.navigationController!.setNavigationBarHidden(true, animated: true)
+            }
             
             self.photoImageView.frame = rect
             self.effectView.alpha = 1.0
@@ -181,8 +184,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         // Animate photo image view
         UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
-            UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
-            self.navigationController!.navigationBarHidden = false
+            self.navigationController!.setNavigationBarHidden(false, animated: true)
             
             self.photoImageView.frame = self.navigationController!.view.convertRect(cell.frame, fromView: self.collectionView)
             self.effectView.alpha = 0.0
