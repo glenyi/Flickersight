@@ -15,11 +15,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     let PhotoCellIdentifier = "PhotoCell"
     let PhotosVerticalInset: CGFloat = 20.0
     
-    let PhotoTappedFrameSizeRatio: CGFloat = 0.95
-    let PhotoTappedAnimationDuration: NSTimeInterval = 0.5
-    let PhotoTappedAnimationOptions: UIViewAnimationOptions = [ .CurveEaseInOut ]
-    let PhotoTappedSpringDampening: CGFloat = 0.8
-    
     let PhotosDefaultSearchText = "cat"
     let PhotosCount = 20
 
@@ -37,20 +32,10 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         return alertController
     }()
     
-    let effectView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .Dark)
-        let effectView = UIVisualEffectView(effect: blurEffect)
-        effectView.alpha = 0
+    lazy var animationController: PhotoAnimationController = {
+        let animationController = PhotoAnimationController()
         
-        return effectView
-    }()
-    
-    let photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.userInteractionEnabled = true
-        imageView.layer.masksToBounds = true
-
-        return imageView
+        return animationController
     }()
     
     var selectedPhotoCell: PhotoCollectionViewCell?
@@ -92,7 +77,9 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         searchBar.text = PhotosDefaultSearchText
         searchBar.showsCancelButton = true
         searchBar.delegate = self
-        // Add search bar to navigation bar
+        
+        // Init nav controller
+        self.navigationController!.delegate = self
         self.navigationItem.titleView = searchBar
         
         // Set collection view layout
@@ -103,16 +90,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         layout.sectionInset = UIEdgeInsets(top: PhotosVerticalInset, left: horizontalInset, bottom: PhotosVerticalInset, right: horizontalInset)
         
         self.loadPhotosWithSearchText(PhotosDefaultSearchText, count: PhotosCount, sortParam: self.sortParam)
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController!.navigationBarHidden = false
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return false
     }
     
     override func didReceiveMemoryWarning() {
@@ -147,67 +124,6 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
                 self.collectionView.reloadData()
             }
         }
-    }
-    
-    func userClickedPhotoCell(cell: PhotoCollectionViewCell) {
-        // Init photo image view
-        let superview = self.navigationController!.view
-        let originalFrame = superview.convertRect(cell.frame, fromView: self.collectionView)
-        self.photoImageView.frame = originalFrame
-        self.photoImageView.image = cell.photoImageView.image
-        self.photoImageView.contentMode = cell.photoImageView.contentMode
-        
-        // Add blur effect and image view
-        self.effectView.frame = superview.bounds
-        self.effectView.alpha = 0
-        superview.addSubview(self.effectView)
-        superview.addSubview(self.photoImageView)
-        cell.hidden = true
-        
-        // Add tap gesture to dismiss view
-        let tapGesture = UITapGestureRecognizer(target: self, action: "photoImageViewTapped:")
-        superview.addGestureRecognizer(tapGesture)
-        
-        // Calculate new image view frame
-        let width = PhotoTappedFrameSizeRatio * superview.frame.width
-        let height = photoImageView.frame.height * width / photoImageView.frame.width
-        let size = CGSize(width: width, height: height)
-        let origin = CGPoint(x: (superview.frame.width - width)/2.0, y: (superview.frame.height - height)/2.0)
-        let rect = CGRect(origin: origin, size: size)
-        
-        // Animate photo image view
-        UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
-            // Hide navigation bar if image overlaps it
-            if CGRectIntersectsRect(self.navigationController!.navigationBar.frame, originalFrame) {
-                self.navigationController!.setNavigationBarHidden(true, animated: true)
-            }
-            
-            self.photoImageView.frame = rect
-            self.effectView.alpha = 1.0
-        }, completion: { (completed) -> Void in
-            self.selectedPhotoCell = cell
-        })
-    }
-    
-    func photoImageViewTapped(tapGesture: UITapGestureRecognizer) {
-        guard let cell = self.selectedPhotoCell, let superview = tapGesture.view else {
-            return
-        }
-        
-        // Animate photo image view
-        UIView.animateWithDuration(PhotoTappedAnimationDuration, delay: 0, usingSpringWithDamping: PhotoTappedSpringDampening, initialSpringVelocity: 0, options: PhotoTappedAnimationOptions, animations: { () -> Void in
-            self.navigationController!.setNavigationBarHidden(false, animated: true)
-            
-            self.photoImageView.frame = self.navigationController!.view.convertRect(cell.frame, fromView: self.collectionView)
-            self.effectView.alpha = 0.0
-        }, completion: { (completed) -> Void in
-            superview.removeGestureRecognizer(tapGesture)
-            self.photoImageView.removeFromSuperview()
-            self.effectView.removeFromSuperview()
-            cell.hidden = false
-            
-            self.selectedPhotoCell = nil
-        })
     }
     
     
@@ -259,7 +175,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
         }
         
         if let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCollectionViewCell, let _ = cell.photoImageView.image {
-            //self.userClickedPhotoCell(cell)
+            self.navigationController!.view.endEditing(true)
             
             self.selectedPhotoCell = cell
             self.selectedPhoto = self.photos[indexPath.row]
@@ -271,11 +187,13 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     // MARK: UINavigationControllerDelegate
     
     func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        self.animationController.operation = operation
+        self.animationController.cell = self.selectedPhotoCell
         
-        return nil
+        return self.animationController
     }
-    
-    
+
+
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

@@ -14,11 +14,11 @@ class PhotoDetailsViewController: UIViewController {
     
     var photo: FlickrPhoto?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Hide navigation bar and status bar
-        self.navigationController!.navigationBarHidden = true
+        
+        self.navigationItem.hidesBackButton = true
         
         // Load photo
         if let photo = self.photo {
@@ -30,10 +30,6 @@ class PhotoDetailsViewController: UIViewController {
                 })
             }
         }
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
     }
 
     override func didReceiveMemoryWarning() {

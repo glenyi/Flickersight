@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -134,20 +133,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TcD-nE-ZDI">
-                                <rect key="frame" x="9.5" y="155.5" width="356" height="356"/>
+                                <rect key="frame" x="18.5" y="100" width="337.5" height="467"/>
                                 <animations/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="TcD-nE-ZDI" secondAttribute="height" multiplier="1:1" id="lKt-lC-ZSy"/>
-                                </constraints>
                             </imageView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="height" secondItem="p94-dv-a6V" secondAttribute="height" multiplier="0.7" id="DrA-Eb-Dox"/>
                             <constraint firstItem="TcD-nE-ZDI" firstAttribute="centerX" secondItem="p94-dv-a6V" secondAttribute="centerX" id="cRB-6w-CFk"/>
                             <constraint firstItem="TcD-nE-ZDI" firstAttribute="centerY" secondItem="p94-dv-a6V" secondAttribute="centerY" id="uLq-KC-KFW"/>
-                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="width" secondItem="p94-dv-a6V" secondAttribute="width" multiplier="0.95" id="vzd-4S-e3L"/>
+                            <constraint firstItem="TcD-nE-ZDI" firstAttribute="width" secondItem="p94-dv-a6V" secondAttribute="width" multiplier="0.9" id="vzd-4S-e3L"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="6Xw-OG-FJp" appends="YES" id="pG4-3J-ZKi"/>
