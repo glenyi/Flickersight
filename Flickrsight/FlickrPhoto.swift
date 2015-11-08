@@ -39,13 +39,17 @@ class FlickrPhoto: NSObject {
     
     func loadImage(completion: (image: UIImage?) -> Void) -> NSURLSessionTask? {
         guard let imageURL = self.imageURL else {
-            completion(image: nil)
+            defer {
+                completion(image: nil)
+            }
             return nil
         }
         
         // Load image asynchronously if needed
         if let image = self.image {
-            completion(image: image)
+            defer {
+                completion(image: image)
+            }
             return nil
         } else {
             let task = NSURLSession.sharedSession().dataTaskWithURL(imageURL, completionHandler: { (data, response, error) -> Void in
