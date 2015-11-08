@@ -61,11 +61,7 @@ class FlickrPhoto: NSObject {
         }
     }
     
-    func loadFromFlickrAPI(dictionary: [String:AnyObject]?) {
-        guard let dictionary = dictionary else {
-            return
-        }
-        
+    func loadFromFlickrAPI(dictionary: [String:AnyObject]) {
         self.id = dictionary["id"] as? String ?? ""
         self.owner = dictionary["owner"] as? String ?? ""
         self.secret = dictionary["secret"] as? String ?? ""
